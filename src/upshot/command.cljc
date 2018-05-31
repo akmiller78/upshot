@@ -6,8 +6,7 @@
 (s/def ::command-key keyword?)
 (s/def ::command-params map?)
 
-(s/def ::command (s/keys :req [::handler
-                               ::params]))
+
 
 (defmulti command
   (fn [k params]
