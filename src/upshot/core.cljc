@@ -13,10 +13,12 @@
   {:pre [(s/valid? (s/coll-of ::command-response/effect) fx)]
    :post [(or (s/valid? ::handler-response/ok %)
               (s/valid? ::handler-response/error %))]}
-  (reduce (fn [result {::command-response/keys [handler params]}]
+  (reduce (fn [[_ last-result] {::command-response/keys [handler params]}]
             (if-let [handler-fn (handler handlers)]
               (try
-                (let [[status result] (apply handler-fn env params)
+                (let [[status handler-result] (apply handler-fn env params)
+                      result (merge last-result
+                                    {handler handler-result})
                       successful? (= status ::handler-response/ok)]
                   (if successful?
                     (handler-response/success-response result)
@@ -66,17 +68,24 @@
     [::handler-response/ok
      {:name "Adam"}])
 
-  (def handlers {:tx-data #'tx-data-h})
+  (defn send-email-h [env params]
+    [::handler-response/ok
+     {:subject "Hello"}])
+
+  (def handlers {:tx-data #'tx-data-h
+                 :send-email #'send-email-h})
 
   (s/valid? ::handlers handlers)
 
   (def p (processor handlers))
 
-  (def cmd [::command-response/ok :tx-data [{:name "Adam"}]])
+  (def cmd [::command-response/ok :tx-data [{:name "Adam"}] :send-email [{:subject "hi"}]])
   (def invalid-cmd [::command-response/invalid {:spec-error true}])
 
   (def r
     (s/conform ::command-response/ok cmd))
+
+  r
 
   (::command-response/effects r)
   (p {} invalid-cmd)
