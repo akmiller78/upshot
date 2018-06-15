@@ -61,34 +61,5 @@
                                   ::handler-response/error
                                   [::response/error m]))))))
 
-
-(comment
-
-  (defn tx-data-h [env params]
-    [::handler-response/ok
-     {:name "Adam"}])
-
-  (defn send-email-h [env params]
-    [::handler-response/ok
-     {:subject "Hello"}])
-
-  (def handlers {:tx-data #'tx-data-h
-                 :send-email #'send-email-h})
-
-  (s/valid? ::handlers handlers)
-
-  (def p (processor handlers))
-
-  (def cmd [::command-response/ok :tx-data [{:name "Adam"}] :send-email [{:subject "hi"}]])
-  (def invalid-cmd [::command-response/invalid {:spec-error true}])
-
-  (def r
-    (s/conform ::command-response/ok cmd))
-
-  r
-
-  (::command-response/effects r)
-  (p {} invalid-cmd)
-  (p {} cmd)
-
-  )
+(defn -main []
+  (println "hello"))
