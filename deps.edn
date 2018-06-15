@@ -1,4 +1,4 @@
-{:paths ["src" "test"] ;; move test to alias before prod build
+{:paths ["src"]
  :deps
  {org.clojure/clojure                 {:mvn/version "1.9.0"}
   org.clojure/spec.alpha              {:mvn/version "0.1.143"}
