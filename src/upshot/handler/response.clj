@@ -30,4 +30,4 @@
   [handler params exc]
   [::error {:error (merge (get-error-location handler params)
                           {:message (.getMessage exc)
-                           :exception exc})}])
+                           :ex-data (ex-data exc)})}])

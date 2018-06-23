@@ -60,6 +60,3 @@
                                   [::response/ok m]
                                   ::handler-response/error
                                   [::response/error m]))))))
-
-(defn -main []
-  (println "hello"))

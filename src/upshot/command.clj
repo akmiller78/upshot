@@ -6,24 +6,8 @@
 (s/def ::command-key keyword?)
 (s/def ::command-params map?)
 
-
-
 (defmulti command
   (fn [k params]
     {:pre [(s/valid? ::command-key k)
            (s/valid? ::command-params params)]}
     k))
-
-
-(comment
-
-  (defmethod command :test
-    [_ params]
-    [:ok])
-
-  (command :test {})
-
-  (s/valid? ::command-params {})
-  (s/explain ::command-params {})
-
-  )
