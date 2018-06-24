@@ -10,11 +10,15 @@ Upshot consists of 3 core parts which are:
 
 Commands involve implementing a multimethod that then describes the actions you want to take place. The multimethod for a command is straightforward:
 
-    (defmulti command
-      (fn [k params]
-        {:pre [(s/valid? ::command-key k)
-               (s/valid? ::command-params params)]}
-        k))
+```clojure
+(defmulti command
+  (fn [k params]
+      {:pre [(s/valid? ::command-key k)
+             (s/valid? ::command-params params)]}
+      k))
+```
+
+
 
 The command methods should be immutable and simply return the desired effect. For example, imagine we are creating users in our system so we might implement a method like the following:
 
