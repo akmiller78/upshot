@@ -5,8 +5,8 @@ The goal of upshot is to push mutability further to the edges of your progam. Th
 Upshot consists of 3 core parts which are:
 
 - Commands
-- Processor
 - Handlers
+- Processor
 
 Commands involve implementing a multimethod that then describes the actions you want to take place. The multimethod for a command is straightforward:
 
@@ -28,6 +28,27 @@ The command methods should be immutable and simply return the desired effect. Fo
     [::command/ok :tx-data [tx-data]]))
 ```
 
+Of course you may want to do other things inside of this command like validation or apply other business rules as needed. The end result however will be a vector that includes the command status along with list of handlers followed by the data required. This particular example includes only one handler `:tx-data`.
 
+Handlers are simply functions that take 2 parameters and return a status and result map. An example handler for the tx-data function might look like the following:
 
-Of course you may want to do other things inside of this command like validation or apply other business rules as needed. The end result however will be a vector that includes the command status along with list of handlers followed by the data required. This particular example includes only one handler.
+```clojure
+(defn tx-data-handler
+  [env data]
+  (let [tx-result (d/transact! (:conn env) {:tx-data [data]})]
+    [::handler/ok tx-result]))
+```
+
+That last piece of the puzzle is the processor that takes the result of a command operation and actually processes the side effects. The creation of the processor requires a map of key -> handler functions.
+
+``` clojure
+(def handlers
+  {:tx-data #'tx-data-handler})
+
+(def command-processor (upshot.core/processor handlers))
+
+(->> (command :myapp.user/create {:email "email@domain.com"
+                                  :first-name "firstname"
+                                  :last-name "lastname"})
+     (command-processor {:conn conn}))
+```
