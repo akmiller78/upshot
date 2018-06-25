@@ -11,9 +11,9 @@ Force you into patterns that make it easy to write testable code. Utilizing upsh
 
 Upshot consists of 3 core parts which are:
 
-- Commands
-- Handlers
-- Processor
+- Commands (written by you)
+- Handlers (written by you)
+- ...and the Processor (provided by upshot)
 
 Commands involve implementing a multimethod that then describes the actions you want to take place. The multimethod for a command is straightforward:
 
