@@ -60,7 +60,7 @@ Handlers are simply functions that take 2 parameters and return a status and res
     [::handler/ok tx-result]))
 ```
 
-That last piece of the puzzle is the processor that takes the result of a command operation and actually processes the side effects. The creation of the processor requires a map of key -> handler functions.
+That last piece of the puzzle is the processor that takes the result of a command operation and actually processes the side effects via the handlers you provide. The creation of the processor requires a map of key -> handler functions.
 
 ``` clojure
 (def handlers
